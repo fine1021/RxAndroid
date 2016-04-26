@@ -57,6 +57,7 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: isUnsubscribed = " + RxEventBus.getInstance().isUnsubscribed(this));
         RxEventBus.getInstance().unsubscribe(this);
         Log.i(TAG, "onDestroy: ok");
     }

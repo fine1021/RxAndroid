@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
@@ -22,4 +23,23 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'io.reactivex:rxjava:1.1.3'
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+publish {
+    userOrg = rootProject.userOrg
+    repoName = rootProject.repoName
+    groupId = 'com.yxkang.rxandroid'
+    artifactId = 'eventbus'
+    publishVersion = '1.0.0'
+    description = 'android eventbus based on RxJava'
+    website = 'https://github.com/fine1021/RxAndroid'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+    licences = rootProject.licences
+    bintrayUser = properties.getProperty("bintray.user")
+    bintrayKey = properties.getProperty("bintray.apikey")
+    dryRun = false
 }

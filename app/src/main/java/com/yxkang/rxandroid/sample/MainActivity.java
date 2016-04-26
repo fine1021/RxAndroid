@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "onDestroy: mSubscription.unsubscribe()");
         }
         MainService.stop(this);
+        Log.i(TAG, "onDestroy: isUnsubscribed = " + RxEventBus.getInstance().isUnsubscribed(this));
         RxEventBus.getInstance().unsubscribe(this);
         super.onDestroy();
     }
