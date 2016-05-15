@@ -31,6 +31,7 @@ import rx.subscriptions.Subscriptions;
  * RxEventBus.getInstance().subscribe(this, subscription);
  * <p/>
  * RxEventBus.getInstance().post(new MessageEvent("MessageEvent"));
+ * // RxEventBus.getInstance().post(new MessageEvent("MessageEvent"), false);
  * </pre>
  * <p>Avoid memory leak, you should add the follow statement when you don't want to receive any events:</p>
  * <pre class="prettyprint">
@@ -69,18 +70,34 @@ public class RxEventBus {
     /**
      * post an event to event bus, the event will always be posted in main Thread
      *
-     * @param o the event
+     * @param event the event
+     * @see #post(Object, boolean)
      */
-    public final void post(final Object o) {
+    public final void post(final Object event) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            mSubject.onNext(o);
+            mSubject.onNext(event);
         } else {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mSubject.onNext(o);
+                    mSubject.onNext(event);
                 }
             });
+        }
+    }
+
+    /**
+     * post an event to event bus
+     *
+     * @param event      the event
+     * @param mainThread {@code true} post the event in main thread, otherwise in current thread
+     * @see #post(Object)
+     */
+    public final void post(final Object event, boolean mainThread) {
+        if (mainThread) {
+            post(event);
+        } else {
+            mSubject.onNext(event);
         }
     }
 
