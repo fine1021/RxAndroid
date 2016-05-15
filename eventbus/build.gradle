@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -22,7 +22,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'io.reactivex:rxjava:1.1.3'
+    compile 'io.reactivex:rxjava:1.1.5'
 }
 
 Properties properties = new Properties()
@@ -33,7 +33,7 @@ publish {
     repoName = rootProject.repoName
     groupId = 'com.yxkang.rxandroid'
     artifactId = 'eventbus'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     description = 'android eventbus based on RxJava'
     website = 'https://github.com/fine1021/RxAndroid'
     issueTracker = "${website}/issues"

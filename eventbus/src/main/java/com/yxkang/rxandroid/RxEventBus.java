@@ -9,10 +9,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import rx.Observable;
 import rx.Subscription;
-import rx.internal.util.SubscriptionList;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * <h1>RxEventBus</h1>
@@ -44,7 +44,7 @@ public class RxEventBus {
     private static final String TAG = RxEventBus.class.getSimpleName();
     private static volatile RxEventBus sRxEventBus;
 
-    private final Map<Object, SubscriptionList> mMap = new HashMap<>();
+    private final Map<Object, CompositeSubscription> mMap = new HashMap<>();
     private final ReentrantLock mReentrantLock = new ReentrantLock(true);
     private final MessageHandler mHandler;
     private final Subject mSubject;
@@ -116,9 +116,9 @@ public class RxEventBus {
     public final void subscribe(Object subscriber, Subscription subscription) {
         mReentrantLock.lock();
         try {
-            SubscriptionList list = mMap.get(subscriber);
+            CompositeSubscription list = mMap.get(subscriber);
             if (list == null) {
-                list = new SubscriptionList(subscription);
+                list = new CompositeSubscription(subscription);
                 mMap.put(subscriber, list);
                 Log.i(TAG, "subscribe: " + subscriber.getClass());
             } else {
@@ -138,7 +138,7 @@ public class RxEventBus {
     public final void unsubscribe(Object subscriber) {
         mReentrantLock.lock();
         try {
-            SubscriptionList list = mMap.get(subscriber);
+            CompositeSubscription list = mMap.get(subscriber);
             if (list != null) {
                 list.unsubscribe();
                 mMap.remove(subscriber);
@@ -158,7 +158,7 @@ public class RxEventBus {
     public final boolean isUnsubscribed(Object subscriber) {
         mReentrantLock.lock();
         try {
-            SubscriptionList list = mMap.get(subscriber);
+            CompositeSubscription list = mMap.get(subscriber);
             return list == null || list.isUnsubscribed();
         } finally {
             mReentrantLock.unlock();
