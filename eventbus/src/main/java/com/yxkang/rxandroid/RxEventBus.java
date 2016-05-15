@@ -13,6 +13,7 @@ import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 import rx.subscriptions.CompositeSubscription;
+import rx.subscriptions.Subscriptions;
 
 /**
  * <h1>RxEventBus</h1>
@@ -118,7 +119,7 @@ public class RxEventBus {
         try {
             CompositeSubscription list = mMap.get(subscriber);
             if (list == null) {
-                list = new CompositeSubscription(subscription);
+                list = Subscriptions.from(subscription);
                 mMap.put(subscriber, list);
                 Log.i(TAG, "subscribe: " + subscriber.getClass());
             } else {
