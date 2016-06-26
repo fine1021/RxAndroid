@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 while (loop < 4) {
                     subscriber.onNext(String.valueOf(loop));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 .delaySubscription(1, TimeUnit.SECONDS)         // delays the subscription one second to the source Observable
                 .subscribeOn(Schedulers.newThread())            // 在一个新线程中调度
                 .observeOn(AndroidSchedulers.mainThread())      // 在Android主线程中观察，处理结果
+                .timeout(3000, TimeUnit.MILLISECONDS)           // 每个函数调用的时间间隔的超时时间(onNext,onCompleted,onError)
                 .subscribe(mSubscriber);                        // 开始订阅
         mSubscriber.add(subscription);                          // 把当前订阅加入到订阅者的订阅列表中
     }
